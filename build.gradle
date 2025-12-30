@@ -10,7 +10,7 @@ description = 'Transaction processing application'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -39,16 +39,14 @@ dependencies {
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.2'
     implementation 'org.apache.parquet:parquet-avro:1.16.0'
     implementation 'org.apache.parquet:parquet-hadoop:1.16.0'
-//    implementation 'org.apache.spark:spark-core_2.13:4.0.1'
-//    implementation 'org.apache.spark:spark-sql_2.13:4.0.1'
-    implementation('org.apache.spark:spark-core_2.13:4.0.1'){
+    implementation('org.apache.spark:spark-core_2.12:3.5.7') {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
     }
-    implementation('org.apache.spark:spark-sql_2.13:4.0.1'){
+    implementation('org.apache.spark:spark-sql_2.12:3.5.7') {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
     }
-    implementation('org.glassfish.jersey.containers:jersey-container-servlet-core:3.1.11')
-    implementation('jakarta.servlet:jakarta.servlet-api:5.0.0')
+    implementation('org.glassfish.jersey.containers:jersey-container-servlet-core:2.41')
+    implementation('jakarta.servlet:jakarta.servlet-api:4.0.4')
 }
 
 tasks.named('test') {
