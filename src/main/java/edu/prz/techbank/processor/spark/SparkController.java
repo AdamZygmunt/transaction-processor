@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/spark")
+@RequestMapping("/api/processing")
 @Slf4j
 public class SparkController {
 
   final SparkService sparkService;
 
-  @PostMapping("/wordcount")
-  public ResponseEntity<String> runWordCount(@RequestParam String inputPath,
+  @PostMapping("/turnovers")
+  public ResponseEntity<String> runTurnoversCalculation(@RequestParam String inputPath,
       @RequestParam String outputPath) {
     try {
       String result = sparkService.runWordCount(inputPath, outputPath);

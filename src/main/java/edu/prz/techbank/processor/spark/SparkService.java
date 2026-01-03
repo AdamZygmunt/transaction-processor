@@ -15,10 +15,11 @@ public class SparkService {
   String hdfsUri;
 
   final SparkSession spark;
+  final WordCountJob wordCountJob;
 
   public String runWordCount(String inputPath, String outputPath) {
 
-    WordCountJob.run(spark, hdfsUri + inputPath, hdfsUri + outputPath);
+    wordCountJob.run(spark, hdfsUri + inputPath, hdfsUri + outputPath);
 
     return "Job Spark WordCount zakończony. Wyniki w: " + hdfsUri + outputPath;
   }

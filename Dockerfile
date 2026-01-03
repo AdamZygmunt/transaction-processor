@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Skopiuj plik JAR do obrazu
 COPY build/libs/transaction-processor-0.0.1-SNAPSHOT.jar app.jar
-COPY build/libs/transaction-processor-0.0.1-SNAPSHOT-plain.jar plain.jar
+COPY build/libs/transaction-processor-0.0.1-SNAPSHOT-plain.jar transaction-processor.jar
 
 # Uruchom aplikację
 #ENTRYPOINT ["java", "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED -verbose:class", "-jar", "app.jar"]

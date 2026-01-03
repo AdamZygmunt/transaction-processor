@@ -1,14 +1,15 @@
 package edu.prz.techbank.processor.spark;
 
-import java.io.Serializable;
 import org.apache.spark.sql.*;
+import org.springframework.stereotype.Service;
 
-public final class WordCountJob implements Serializable {
+@Service
+public final class WordCountJob {
 
   private WordCountJob() {
   }
 
-  public static void run(
+  public void run(
       SparkSession spark,
       String inputPath,
       String outputPath) {

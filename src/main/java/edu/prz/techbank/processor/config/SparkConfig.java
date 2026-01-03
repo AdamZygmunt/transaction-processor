@@ -1,7 +1,5 @@
 package edu.prz.techbank.processor.config;
 
-import edu.prz.techbank.processor.spark.WordCountJob;
-import edu.prz.techbank.processor.spark.WordCountMapFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.SparkSession;
@@ -26,14 +24,14 @@ public class SparkConfig {
   @Bean
   public SparkConf sparkConf() {
     return new SparkConf()
-        .setAppName("SpringBootSparkApp")
+        .setAppName("TechBankTransactionProcessor")
         .setMaster(sparkMaster)
+        .setJars(new String[]{"transaction-processor.jar"})
         .set("spark.driver.extraJavaOptions", ADD_OPENS_)
         .set("spark.executor.extraJavaOptions", ADD_OPENS_)
-        .setJars(new String[]{"plain.jar"})
         .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         .set("spark.kryo.registrationRequired", "false")
-        .registerKryoClasses(new Class<?>[]{WordCountJob.class, WordCountMapFunction.class});
+        .set("spark.sql.sources.partitionOverwriteMode", "dynamic");
   }
 
   @Bean
