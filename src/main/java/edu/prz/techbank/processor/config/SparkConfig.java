@@ -11,12 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class SparkConfig {
 
-  private static final String ADD_OPENS_ =
+  private static final String JAVA_OPTIONS =
       "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED "
           + "--add-opens=java.base/sun.security.action=ALL-UNNAMED "
-          + "--add-opens=java.base/java.nio=ALL-UNNAMED"
-          + "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
-          + "--add-opens=java.base/java.util=ALL-UNNAMED";
+          + "--add-opens=java.base/java.nio=ALL-UNNAMED "
+          + "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED "
+          + "--add-opens=java.base/java.util=ALL-UNNAMED "
+          + "-Dlog4j.configurationFile=/opt/spark/conf/log4j2.properties";
 
   @Value("${spark.master}")
   private String sparkMaster;
@@ -27,8 +28,8 @@ public class SparkConfig {
         .setAppName("TechBankTransactionProcessor")
         .setMaster(sparkMaster)
         .setJars(new String[]{"transaction-processor.jar"})
-        .set("spark.driver.extraJavaOptions", ADD_OPENS_)
-        .set("spark.executor.extraJavaOptions", ADD_OPENS_)
+        .set("spark.driver.extraJavaOptions", JAVA_OPTIONS)
+        .set("spark.executor.extraJavaOptions", JAVA_OPTIONS)
         .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         .set("spark.kryo.registrationRequired", "false")
         .set("spark.sql.sources.partitionOverwriteMode", "dynamic");

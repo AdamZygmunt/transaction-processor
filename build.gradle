@@ -45,8 +45,9 @@ dependencies {
     implementation('org.apache.spark:spark-sql_2.13:4.0.1') {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
     }
-    implementation('org.glassfish.jersey.containers:jersey-container-servlet-core:3.1.11')
     implementation('jakarta.servlet:jakarta.servlet-api:5.0.0')
+
+//    TODO wykluczyć jersey-server-1.19.4 z hadoopa (problem z UI executors)
 }
 
 tasks.named('test') {
