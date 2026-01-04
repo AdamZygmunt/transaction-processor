@@ -1,6 +1,7 @@
 package edu.prz.techbank.processor.spark;
 
 import edu.prz.techbank.processor.domain.transaction.Transaction;
+import edu.prz.techbank.processor.domain.turnover.Turnover;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +15,28 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class SparkProcessingController {
 
+  final SparkTransactionService transactionService;
+  final SparkTurnoverService turnoverService;
   final TurnoverCalculationJob turnoverCalculationJob;
 
   @PostMapping("/turnover")
-  public ResponseEntity<String> runTurnoversCalculation(
-      @RequestParam String inputPath,
-      @RequestParam LocalDate date,
-      @RequestParam String outputPath) {
+  public ResponseEntity<String> runTurnoversCalculation(@RequestParam LocalDate date) {
 
-    turnoverCalculationJob.run(inputPath, date, outputPath);
+    turnoverCalculationJob.run(date);
 
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/transactions")
-  public ResponseEntity<List<Transaction>> getTransactions(
-      @RequestParam String inputPath,
-      @RequestParam LocalDate date) {
+  public ResponseEntity<List<Transaction>> getTransactions(@RequestParam LocalDate date) {
 
-    return ResponseEntity.ok(turnoverCalculationJob.getTransactionsAsList(inputPath, date));
+    return ResponseEntity.ok(transactionService.getTransactionsAsList(date));
   }
+
+  @GetMapping("/turnover")
+  public ResponseEntity<List<Turnover>> getTransactions(@RequestParam String account) {
+
+    return ResponseEntity.ok(turnoverService.getOrderedTurnoverAsList(account));
+  }
+
 }

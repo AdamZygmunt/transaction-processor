@@ -16,3 +16,9 @@ parquet:
 
 spark:
   master: spark://spark-master:7077
+
+processing:
+  transaction:
+    path: /data/transactions
+  turnover:
+    path: /data/turnover

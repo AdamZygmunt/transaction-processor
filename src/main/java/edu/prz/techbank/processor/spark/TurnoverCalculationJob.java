@@ -1,51 +1,34 @@
 package edu.prz.techbank.processor.spark;
 
-import edu.prz.techbank.processor.domain.transaction.Transaction;
+import static org.apache.spark.sql.functions.lit;
+import static org.apache.spark.sql.functions.sum;
+
 import edu.prz.techbank.processor.domain.turnover.Turnover;
-import edu.prz.techbank.processor.domain.turnover.TurnoverCalculator;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.SaveMode;
-import org.apache.spark.sql.SparkSession;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public final class TurnoverCalculationJob {
 
-  @Value("${hdfs.uri}")
-  String hdfsUri;
+  final SparkTransactionService transactionService;
+  final SparkTurnoverService turnoverService;
 
-  final SparkSession spark;
+  public void run(LocalDate date) {
 
-  public void run(String inputPath, LocalDate date, String outputPath) {
-    val turnover = getTransactions(inputPath, date)
-        .map(new TurnoverCalculator(), Encoders.bean(Turnover.class));
-    writeTurnover(turnover, outputPath);
-  }
+    val turnover = transactionService.getTransactions(date)
+        .groupBy("sender", "currency")
+        .agg(
+            sum("amount").alias("amount")
+        )
+        .withColumnRenamed("sender", "account")
+        .withColumn("date", lit(date))
+        .as(Encoders.bean(Turnover.class));
 
-  private Dataset<Transaction> getTransactions(String inputPath, LocalDate date) {
-    return spark
-        .read()
-        .parquet(hdfsUri + inputPath + "/date=" + date)
-        .as(Encoders.bean(Transaction.class));
-  }
-
-  private void writeTurnover(Dataset<Turnover> turnover, String outputPath) {
-    turnover.write()
-        .mode(SaveMode.Overwrite)
-        .partitionBy("date")
-        .parquet(hdfsUri + outputPath);
-  }
-
-  public List<Transaction> getTransactionsAsList(String inputPath, LocalDate date) {
-    return getTransactions(inputPath, date)
-        .collectAsList();
+    turnoverService.writeTurnover(turnover);
   }
 
 }
