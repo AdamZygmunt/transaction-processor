@@ -34,7 +34,7 @@ public class SparkTurnoverService {
         .read()
         .parquet(hdfsUri + path)
         .filter("account='" + account + "'")
-//        .filter(col("account").equalTo(account) // alternatywa
+//        .filter(col("account").equalTo(account)) // alternatywny sposób filtrowania
         .as(Encoders.bean(Turnover.class));
   }
 
