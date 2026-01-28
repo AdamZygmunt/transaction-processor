@@ -9,7 +9,7 @@ public class TurnoverCalculator implements MapFunction<Transaction, Turnover> {
 
   @Override
   public Turnover call(Transaction transaction) {
-    return new Turnover(transaction.getSender(), transaction.getDate(), 0.0); // FIXME
+    return new Turnover(transaction.getSender(), transaction.getDate(), 0.0, "PLN"); // FIXME
   }
 
 }

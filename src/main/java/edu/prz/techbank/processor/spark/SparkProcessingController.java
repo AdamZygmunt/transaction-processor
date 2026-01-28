@@ -34,7 +34,7 @@ public class SparkProcessingController {
   }
 
   @GetMapping("/turnover")
-  public ResponseEntity<List<Turnover>> getTransactions(@RequestParam String account) {
+  public ResponseEntity<List<Turnover>> getTurnover(@RequestParam String account) {
 
     return ResponseEntity.ok(turnoverService.getOrderedTurnoverAsList(account));
   }

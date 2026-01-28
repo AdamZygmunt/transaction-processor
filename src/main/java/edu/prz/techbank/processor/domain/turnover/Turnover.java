@@ -12,4 +12,5 @@ public class Turnover {
   String account;
   String date; // yyyy-MM-dd
   Double amount;
+  String currency;
 }
