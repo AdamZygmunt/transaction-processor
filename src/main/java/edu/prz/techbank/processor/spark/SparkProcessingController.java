@@ -20,7 +20,7 @@ public class SparkProcessingController {
   final TurnoverCalculationJob turnoverCalculationJob;
 
   @PostMapping("/turnover")
-  public ResponseEntity<String> runTurnoversCalculation(@RequestParam LocalDate date) {
+  public ResponseEntity<String> runTurnoversCalculation(@RequestParam LocalDate date) {   
 
     turnoverCalculationJob.run(date);
 
@@ -28,11 +28,16 @@ public class SparkProcessingController {
   }
 
   @GetMapping("/transactions")
-  public ResponseEntity<List<Transaction>> getTransactions(@RequestParam LocalDate date) {
+  public ResponseEntity<List<Transaction>> getTransactions(@RequestParam LocalDate date, @RequestParam(required = false) String account) { 
+  // muszę przede wszystkim dodać nowy argument, który jest opcjonalnym
 
-    return ResponseEntity.ok(transactionService.getTransactionsAsList(date));
+    return ResponseEntity.ok(transactionService.getTransactionsAsList(date, account));
+    // dodaję parmatr account, by teraz oba były przekazywane do serwisu
+    // zaktualizowałem również plik SparkTransactionService by po zmianach obsługiwał filtrowanie z dodatkowym argumentem
   }
 
+
+  
   @GetMapping("/turnover")
   public ResponseEntity<List<Turnover>> getTurnover(@RequestParam String account) {
 
